@@ -1,0 +1,48 @@
+# mac-security-suite
+
+A **read-only, on-demand** macOS security harness, packaged as a [Claude Code](https://claude.com/claude-code) plugin. Open-source tooling only. No resident daemons, no self-surveillance — every check snapshots state, diffs against a known-good baseline, and surfaces only what changed.
+
+> **Design spine:** read-only · on-demand · baseline-and-diff · recommend-never-mutate.
+> The agent drives a headless scanning layer; real-time GUI guardians (BlockBlock, OverSight) stay out-of-band. Aligned with the [drduh macOS Security & Privacy Guide](https://github.com/drduh/macOS-Security-and-Privacy-Guide): threat-model first, OS hardening + an egress firewall + persistence alerts get you ~90% of the value.
+
+## Install
+
+```
+/plugin marketplace add ejkaz/claude-mac-security
+/plugin install mac-security-suite@claude-mac-security
+```
+
+Then provision the open-source toolchain (installs nothing by default — shows you what's missing):
+
+```
+bash ~/.claude/plugins/.../bin/install-tools.sh           # audit
+bash ~/.claude/plugins/.../bin/install-tools.sh --install # headless CLI layer
+```
+
+## Skills
+
+| Skill | Does | Built on |
+|---|---|---|
+| `/mac-security:security-scan` | Read-only sweep: monitoring agents, persistence, malware sigs, network exposure, hardening posture. Diffs a baseline. | native macOS + osquery |
+| `/mac-security:firewall` | Egress advisor — review/curate LuLu's per-process allowlist; diff live connections. | LuLu + lulu-cli + Netiquette |
+| `/mac-security:persistence-watch` | Enumerate all persistence, diff a baseline, VirusTotal reputation per binary. | KnockKnock |
+| `/mac-security:malware-triage <path>` | On-demand triage of a file/app: signature + IOC + capability + reputation. | ClamAV · YARA · capa · vt-cli |
+| `/mac-security:harden` | Hardening-index score + audit-only CIS/NIST checklist. Never auto-applies. | Lynis · mSCP |
+
+A `security-analyst` subagent interprets findings (attribution, capability-vs-activity, triage).
+
+## Toolchain (all open-source)
+
+**Headless / agent-driven:** LuLu + [lulu-cli](https://github.com/woop/lulu-cli) · [KnockKnock](https://github.com/objective-see/KnockKnock) · [Netiquette](https://github.com/objective-see/Netiquette) · ClamAV · [YARA](https://github.com/VirusTotal/yara) · [capa](https://github.com/mandiant/capa) · [vt-cli](https://github.com/VirusTotal/vt-cli) · [Lynis](https://github.com/CISOfy/lynis) · osquery (ad-hoc CLI only).
+
+**GUI guardians (install-and-forget, not agent-drivable):** [BlockBlock](https://objective-see.org/products/blockblock.html), [OverSight](https://objective-see.org/products/oversight.html), [RansomWhere?](https://objective-see.org/products/ransomwhere.html).
+
+**Deliberately excluded:** Santa lockdown, osqueryd + Fleet, Pi-hole, resident AV, Little Snitch (not OSS) — friction / attack-surface / paid for a personal non-MDM Mac.
+
+## Scope & honesty
+
+This catches commodity/commercial tooling and standard persistence. It does **not** guarantee detection of a bespoke, fileless, or well-hidden targeted implant. The VirusTotal reputation layer narrows that gap; nothing closes it entirely.
+
+## License
+
+MIT © Eric Kazmaier

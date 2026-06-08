@@ -1,0 +1,25 @@
+{
+  "version": "1",
+  "name": "claude-mac-security",
+  "description": "Open-source, read-only macOS security harness for Claude Code — scan, egress firewall, persistence diffing, malware triage, and hardening audit.",
+  "owner": {
+    "name": "Eric Kazmaier",
+    "url": "https://github.com/ejkaz"
+  },
+  "plugins": [
+    {
+      "name": "mac-security-suite",
+      "displayName": "Mac Security Suite",
+      "description": "Read-only, on-demand macOS security harness: scan, egress firewall, persistence diffing, malware triage, hardening audit. Open-source tooling only.",
+      "version": "0.1.0",
+      "author": {
+        "name": "Eric Kazmaier",
+        "url": "https://github.com/ejkaz"
+      },
+      "homepage": "https://github.com/ejkaz/claude-mac-security",
+      "license": "MIT",
+      "keywords": ["security", "macos", "malware", "firewall", "persistence", "hardening"],
+      "source": "./"
+    }
+  ]
+}

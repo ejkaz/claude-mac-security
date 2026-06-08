@@ -1,0 +1,11 @@
+# Scan artifacts / reports are machine-specific — keep them out of the public repo.
+*.report.md
+audits/
+reports/
+*.pcap
+.DS_Store
+
+# Never commit secrets / keys
+.vt.toml
+*.key
+.env
