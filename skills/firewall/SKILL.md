@@ -40,8 +40,8 @@ require `sudo`; surface the command, let the user run it.
    ```
    Netiquette -list -names -pretty -skipApple
    ```
-   Parse the JSON. For each process→remote, attribute the destination (Anthropic
-   `160.79.104.0/24`, Google ranges, Adobe/AWS, etc. — see `references/egress_baseline.md`).
+   Parse the JSON. For each process→remote, attribute the destination (cloud AI APIs,
+   browser push, vendor telemetry, etc. — see `references/egress_baseline.md`).
 2. **List current LuLu rules**:
    ```
    lulu-cli list

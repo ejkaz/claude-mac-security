@@ -16,9 +16,9 @@ description: >-
 
 # Security Scan
 
-Read-only audit of a macOS machine for **monitoring tools, persistence, malware, network exposure, and hardening gaps.** Never mutates system state — it reports and recommends; the user approves any change. Built from a real investigation of a Vanta/osquery compliance agent (see `references/baseline.md` for the origin context).
+Read-only audit of a macOS machine for **monitoring tools, persistence, malware, network exposure, and hardening gaps.** Never mutates system state — it reports and recommends; the user approves any change. Born from a real investigation of an osquery-based SOC2 compliance agent — the lesson baked in: distinguish *capability present* from *actively running*, and attribute every agent to its deployer before alarming.
 
-**Trigger:** `/security-scan` · `/security-scan deep` · `/security-scan harden`
+**Trigger:** `/mac-security:security-scan` · `… deep` · `… harden`
 
 ## Modes
 
@@ -32,19 +32,21 @@ Read-only audit of a macOS machine for **monitoring tools, persistence, malware,
 
 1. **Execute the scan:**
    ```
-   bash ~/.claude/skills/security-scan/scripts/scan.sh
+   bash ${CLAUDE_PLUGIN_ROOT}/skills/security-scan/scripts/scan.sh
    ```
-   For deep mode also run `bash ~/.claude/skills/security-scan/scripts/deep.sh` and hand the user the Tier-2 sudo block to paste with `!`.
+   For deep mode also run `${CLAUDE_PLUGIN_ROOT}/skills/security-scan/scripts/deep.sh` and hand the user the Tier-2 sudo block to paste with `!`.
 
 2. **Diff against baseline.** Read `references/baseline.md`. Compare the scan's `## Fingerprint` block line-by-line. **Flag every NEW line** (new launchd job, new system extension, new listening port, new login item) — these are the findings. Removed lines are usually benign (uninstalled apps) but note them.
 
 3. **Interpret, don't just dump.** For each delta: what is it, who likely installed it (user / vendor updater / employer / unknown), and does it have a monitoring/exfil/keylog capability. Distinguish *capability present* from *actively running*. Benign-but-noisy items (Adobe/Microsoft/Google updaters, screen-share permissions for Zoom/Slack) belong in the baseline, not the alert list.
 
-4. **Write the report** to the hub:
+4. **Write the report** to a local audits directory (defaults below; override per your setup):
    ```
-   <hub>/audits/security_scan_<YYYYMMDD_HHMMSS>.md
+   ${CLAUDE_PLUGIN_DATA}/audits/security_scan_<YYYYMMDD_HHMMSS>.md
    ```
-   where `<hub>` = `~/Desktop/Parspec.b/Vault/005_The_Lab/5.3_Automation_&_Scripts/Claude_Harness_Config`. Lead with a verdict line (✅ clean / ⚠️ N deltas to review), then the deltas, then the full scan appended.
+   (or any private location you prefer, e.g. a notes vault). Lead with a verdict line
+   (✅ clean / ⚠️ N deltas to review), then the deltas, then the full scan appended.
+   Keep reports out of any public repo — they fingerprint your machine.
 
 5. **Update the baseline** only when the user confirms a new item is legitimate — append it to `references/baseline.md` with a one-line justification so it stops alerting next run.
 
