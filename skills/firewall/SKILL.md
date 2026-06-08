@@ -34,6 +34,14 @@ require `sudo`; surface the command, let the user run it.
 | `firewall connections` | `Netiquette -list -names -pretty -skipApple` → parse JSON, diff vs baseline, surface NEW listeners/flows. |
 | `firewall recent` | `lulu-cli recent 50` — most recently prompted/created rules (catches "what did I just approve"). |
 
+## Run
+
+```
+bash ${CLAUDE_PLUGIN_ROOT}/skills/firewall/scripts/firewall.sh
+```
+One read-only snapshot: LuLu status + rules + recent, live connections (Netiquette, lsof
+fallback), and app-firewall posture. Then diff against the baseline per the procedure below.
+
 ## Procedure
 
 1. **Snapshot live egress** (read-only, no sudo):

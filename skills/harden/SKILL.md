@@ -20,6 +20,14 @@ Threat-model-first, aligned with the drduh macOS Security & Privacy guide and NI
 bash ${CLAUDE_PLUGIN_ROOT}/bin/install-tools.sh   # confirms lynis
 ```
 
+## Run
+
+```
+bash ${CLAUDE_PLUGIN_ROOT}/skills/harden/scripts/harden.sh
+```
+Read-only posture audit: core controls, remote access, GUI-guardian presence, and Lynis
+index if installed. For full Lynis coverage, follow up with `sudo lynis audit system`.
+
 ## Procedure
 
 1. **Baseline posture** (built-in, no install — same checks as [[security-scan]]):

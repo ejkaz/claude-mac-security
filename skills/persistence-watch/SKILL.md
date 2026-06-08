@@ -24,6 +24,14 @@ bash ${CLAUDE_PLUGIN_ROOT}/bin/install-tools.sh   # confirms knockknock
 Security > Full Disk Access) or KnockKnock can't read several persistence locations.
 A VirusTotal key (`vt init`, free) enables the reputation column.
 
+## Run
+
+```
+VT_KEY=$(vt key 2>/dev/null) bash ${CLAUDE_PLUGIN_ROOT}/skills/persistence-watch/scripts/persistence.sh
+```
+Runs KnockKnock (with VirusTotal if `VT_KEY` is set) plus a native launchd/login-item/kext
+cross-check, all read-only. Then diff against the baseline per the procedure below.
+
 ## Procedure
 1. **Snapshot** (no sudo; needs FDA):
    ```
