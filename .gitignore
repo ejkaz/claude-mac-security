@@ -9,3 +9,6 @@ reports/
 .vt.toml
 *.key
 .env
+
+# Local-only agent context pointer (references private vault hub — do not publish)
+CLAUDE.md
