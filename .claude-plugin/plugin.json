@@ -1,7 +1,7 @@
 {
   "name": "mac-security-suite",
   "description": "Read-only, on-demand macOS security harness — scan, egress firewall (LuLu), persistence diffing (KnockKnock), malware triage (ClamAV/YARA/capa/VirusTotal), and hardening audit (Lynis/mSCP). Baseline-and-diff, no resident daemons, no self-surveillance.",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "author": {
     "name": "Eric Kazmaier",
     "url": "https://github.com/ejkaz"
