@@ -11,7 +11,7 @@
       "name": "mac-security-suite",
       "displayName": "Mac Security Suite",
       "description": "Read-only, on-demand macOS security harness: scan, egress firewall, persistence diffing, malware triage, hardening audit. Open-source tooling only.",
-      "version": "0.1.0",
+      "version": "0.1.1",
       "author": {
         "name": "Eric Kazmaier",
         "url": "https://github.com/ejkaz"
