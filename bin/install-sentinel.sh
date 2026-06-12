@@ -7,7 +7,7 @@
 #        bash install-sentinel.sh --remove   # uninstall
 
 set -euo pipefail
-LABEL="com.eric.mac-security-sentinel"
+LABEL="com.mac-security-suite.sentinel"
 PLIST="$HOME/Library/LaunchAgents/$LABEL.plist"
 BIN="$(cd "$(dirname "$0")" && pwd)"
 

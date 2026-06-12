@@ -12,12 +12,15 @@ A **read-only, on-demand** macOS security harness, packaged as a [Claude Code](h
 /plugin install mac-security-suite@claude-mac-security
 ```
 
-Then provision the open-source toolchain (installs nothing by default — shows you what's missing):
+**New machine?** One command does the rest (toolchain, YARA rules, Quad9 DNS profile, weekly sentinel), then prints the unscriptable GUI gates (LuLu approval, Full Disk Access, VirusTotal key) and how to seed your baselines after:
 
 ```
-bash ~/.claude/plugins/.../bin/install-tools.sh           # audit
-bash ~/.claude/plugins/.../bin/install-tools.sh --install # headless CLI layer
+PLUGIN=~/.claude/plugins/marketplaces/claude-mac-security
+bash "$PLUGIN/bin/bootstrap.sh"          # phase 1 + GUI checklist
+bash "$PLUGIN/bin/bootstrap.sh" --seed   # after the gates: seed baselines + first run
 ```
+
+Baselines, snapshots, and the trend ledger are per-machine state in `~/.mac-security-suite/` — each machine seeds its own; nothing machine-identifying ships in this repo. To audit the toolchain piecemeal instead: `bash "$PLUGIN/bin/install-tools.sh"` (read-only; `--install` to provision).
 
 ## Skills
 
