@@ -24,7 +24,9 @@ if ! command -v brew >/dev/null 2>&1; then
 fi
 
 # Headless CLI layer (agent-drivable, on-demand, no resident daemons)
-FORMULAE=(clamav yara lynis dnscrypt-proxy)        # brew formulae
+FORMULAE=(clamav yara lynis)                       # brew formulae
+# dnscrypt-proxy deliberately dropped (resident daemon). For encrypted+filtered DNS with
+# zero residency, install a Quad9 DoH configuration profile instead — see manual steps.
 CASKS=(lulu knockknock)                            # brew casks (GUI apps w/ CLI hooks)
 # capa + vt-cli: release binaries, not in brew core — handled below.
 
@@ -53,14 +55,18 @@ if have lulu-cli; then echo "  ✅ lulu-cli"; else
   echo "  ❌ lulu-cli (missing — brew install woop/tap/lulu-cli)"
   [ "$INSTALL" = 1 ] && brew install woop/tap/lulu-cli
 fi
-# vt-cli — VirusTotal reputation
+# vt-cli — VirusTotal reputation (release binary; not in brew)
 if have vt; then echo "  ✅ vt (vt-cli)"; else
-  echo "  ❌ vt-cli (missing — see https://github.com/VirusTotal/vt-cli/releases)"
+  echo "  ❌ vt-cli (missing — gh release download -R VirusTotal/vt-cli -p MacOSX.zip, unzip, move 'vt' into PATH, de-quarantine)"
 fi
-# capa — Mach-O capability triage
+# capa — Mach-O capability triage (release binary; not in brew)
 if have capa; then echo "  ✅ capa"; else
-  echo "  ❌ capa (missing — brew install capa  OR  https://github.com/mandiant/capa/releases)"
-  [ "$INSTALL" = 1 ] && brew install capa 2>/dev/null || true
+  echo "  ❌ capa (missing — gh release download -R mandiant/capa -p '*macos-arm64.zip', unzip, move into PATH, de-quarantine)"
+fi
+# YARA rules — fetched, not vendored
+if [ -d "$HOME/.mac-security-suite/yara-rules/elastic-macos" ]; then echo "  ✅ yara-rules (elastic-macos)"; else
+  echo "  ❌ yara-rules (missing — bash bin/get-yara-rules.sh)"
+  [ "$INSTALL" = 1 ] && bash "$(dirname "$0")/get-yara-rules.sh"
 fi
 
 echo
@@ -80,6 +86,8 @@ echo "  2. VirusTotal key:     vt init     (free key at virustotal.com)"
 echo "  3. Full Disk Access:   System Settings > Privacy & Security > Full Disk Access"
 echo "                         → add your terminal so KnockKnock + osquery tables work."
 echo "  4. LuLu:               launch once, approve the system extension, then lulu-cli drives rules."
+echo "  5. Encrypted DNS:      install a Quad9 DoH configuration profile (quad9.net) —"
+echo "                         encrypted + malware-filtered DNS with no resident daemon."
 echo
 echo "Headless-only quick install:  bash install-tools.sh --install"
 echo "Everything incl. GUI apps:    bash install-tools.sh --install --gui"
