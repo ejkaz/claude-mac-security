@@ -31,6 +31,22 @@ bash ~/.claude/plugins/.../bin/install-tools.sh --install # headless CLI layer
 
 A `security-analyst` subagent interprets findings (attribution, capability-vs-activity, triage).
 
+## Diff engine & sentinel (v0.2)
+
+Deterministic, zero-LLM core under the skills — prose diffing replaced by canonical JSON:
+
+| Tool | Does |
+|---|---|
+| `bin/snapshot.py <kind>` | Canonical `{section: {key: detail}}` snapshot — `persistence` (KnockKnock), `egress` (LuLu rules), `posture` (SIP/Gatekeeper/FileVault/firewall, system extensions, launchd inventory) |
+| `bin/baseline_diff.py <kind>` | Diff snapshot vs JSON baseline. **Added/changed = findings (exit 1)**; removed = informational. `--init` seeds. |
+| `bin/accept_delta.py <kind> <key> -m "why"` | Promote a confirmed-legit delta into the baseline with a dated justification (required). |
+| `bin/sentinel.sh` | The ONE scheduled job: snapshot → diff → trend ledger (`~/.mac-security-suite/ledger.jsonl`). Notifies only on findings; silent when clean. Weekly quick, auto-deep (VirusTotal) monthly. Install: `bash bin/install-sentinel.sh`. |
+
+Data lives in `~/.mac-security-suite/` (baselines, snapshots, ledger, reports) — never in this repo.
+For full persistence coverage from launchd, grant **KnockKnock.app** Full Disk Access (terminal FDA doesn't extend to cron).
+
+The optional `hooks/hooks.json` PreToolUse guard (blocks `curl|sh` pipe-to-shell installs and `rm -rf`) ships **enabled** as of v0.2.
+
 ## Toolchain (all open-source)
 
 **Headless / agent-driven:** LuLu + [lulu-cli](https://github.com/woop/lulu-cli) · [KnockKnock](https://github.com/objective-see/KnockKnock) · [Netiquette](https://github.com/objective-see/Netiquette) · ClamAV · [YARA](https://github.com/VirusTotal/yara) · [capa](https://github.com/mandiant/capa) · [vt-cli](https://github.com/VirusTotal/vt-cli) · [Lynis](https://github.com/CISOfy/lynis) · osquery (ad-hoc CLI only).

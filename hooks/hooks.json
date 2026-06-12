@@ -1,7 +1,6 @@
 {
-  "_comment": "OPTIONAL hardening hooks — DISABLED by default. This plugin's spine is read-only/on-demand; it does not silently police your shell. To enable a guard, move an entry from _disabled into hooks and reload. Example below blocks pipe-to-shell installs (curl|sh) and rm -rf at the PreToolUse stage.",
-  "hooks": {},
-  "_disabled": {
+  "_comment": "Hardening guard — ENABLED as of v0.2 (MSS-D005). guard-bash.sh blocks pipe-to-shell installs (curl|sh) and rm -rf at PreToolUse; everything else passes through. Move the entry back to _disabled to turn it off.",
+  "hooks": {
     "PreToolUse": [
       {
         "matcher": "Bash",
@@ -14,5 +13,6 @@
         ]
       }
     ]
-  }
+  },
+  "_disabled": {}
 }
