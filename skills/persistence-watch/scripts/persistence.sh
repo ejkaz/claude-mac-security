@@ -22,13 +22,18 @@ done
 hr "KnockKnock snapshot"
 if [ -n "$KK" ]; then
   note "✅ KnockKnock found. (Needs Full Disk Access on this terminal to read all locations.)"
+  # Full JSON goes to a file — truncating it inline corrupts the JSON for diffing.
+  KK_OUT="${KK_OUT:-$(mktemp -t knockknock).json}"
   if [ -n "${VT_KEY:-}" ]; then
     note "_VirusTotal reputation: ENABLED._"
-    code "$("$KK" -whosthere -pretty -skipApple -key "$VT_KEY" 2>&1 | head -400 || true)"
+    "$KK" -whosthere -pretty -skipApple -key "$VT_KEY" > "$KK_OUT" 2>/dev/null || true
   else
     note "_VirusTotal reputation: off (export VT_KEY=<key> to enable)._"
-    code "$("$KK" -whosthere -pretty -skipApple 2>&1 | head -400 || true)"
+    "$KK" -whosthere -pretty -skipApple > "$KK_OUT" 2>/dev/null || true
   fi
+  note "_Full JSON: \`$KK_OUT\` — parse/diff that file; summary below._"
+  SUMMARIZER="$(dirname "$0")/kk_summary.py"
+  code "$(python3 "$SUMMARIZER" "$KK_OUT" 2>/dev/null || echo '(summary unavailable — read the JSON file directly)')"
 else
   note "❌ KnockKnock not installed (\`brew install --cask knockknock\`) — native fallback below."
 fi
