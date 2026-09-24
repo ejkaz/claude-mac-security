@@ -1,17 +1,16 @@
 ---
 name: security-scan
 description: >-
-  Read-only macOS security sweep — detects monitoring/surveillance agents (MDM,
-  EDR, DLP, RMM, time-trackers, spyware), persistence (launchd, shell rc, cron,
-  login items, BTM), malware signatures, network exposure, privacy-permission
-  grants (screen recording / keylogging vectors), and hardening posture (SIP,
-  Gatekeeper, FileVault, firewall). Diffs against a known-good baseline so
-  recurring runs surface only what CHANGED. Optional reputation layer via
-  KnockKnock + VirusTotal and Lynis hardening audit. Invoke with /security-scan
-  (quick), /security-scan deep (privileged + tools), or /security-scan harden
-  (hardening checklist). Trigger phrases: "security scan", "scan my mac",
-  "is anything monitoring me", "check for spyware/malware", "what's watching
-  my machine", "audit my laptop", "harden my mac", "check my security posture".
+  Runs a read-only, whole-machine macOS security sweep — monitoring and surveillance agents (MDM,
+  EDR, DLP, RMM, time-trackers, spyware), persistence, malware signatures, network exposure,
+  privacy-permission grants and hardening posture — and diffs the fingerprint against a known-good
+  baseline (a private file at $MAC_SECURITY_BASELINE or ~/.config/mac-security/baseline.md, else
+  the bundled template) so recurring runs surface only changes. Modes: quick, deep, harden
+  checklist. Use when: "security scan", "scan my mac", "is anything monitoring me", "what's
+  watching my machine", "check for spyware", "audit my laptop". NOT for checking one specific
+  file, app or download (→ malware-triage), outbound connections or LuLu rules (→ firewall),
+  KnockKnock autostart inventory with VirusTotal (→ persistence-watch), or a Lynis/CIS hardening
+  score (→ harden).
 ---
 
 # Security Scan
@@ -26,7 +25,17 @@ Read-only audit of a macOS machine for **monitoring tools, persistence, malware,
 |---|---|---|
 | `quick` (default) | `scripts/scan.sh` — MDM, extensions, launchd, shell/cron/ssh/hosts, known-agent signatures, hardening baseline, network exposure, fingerprint | none |
 | `deep` | quick **+** `scripts/deep.sh` — emits a sudo block for the user (`sfltool dumpbtm`, firewall, remote-login, profiles, root-CA trust, TCC GUI guidance) **+** runs KnockKnock + Lynis if installed | user runs sudo block via `!` |
-| `harden` | reads latest report + `references/baseline.md`, produces a hardening checklist of recommended (not auto-applied) actions | none |
+| `harden` | reads latest report + your baseline (see *Baseline location*), produces a hardening checklist of recommended (not auto-applied) actions | none |
+
+## Baseline location
+
+A populated baseline fingerprints your machine, so keep it **outside this repo**. The skill reads, in order:
+
+1. `$MAC_SECURITY_BASELINE`, if set and the file exists;
+2. `~/.config/mac-security/baseline.md`, if it exists;
+3. otherwise the bundled `references/baseline.md` — an **example template** only, so every real item will show up as a delta.
+
+`scripts/resolve_baseline.sh` prints the resolved path (and a stderr note when it falls back to the template). To start your own: `mkdir -p ~/.config/mac-security && cp "${CLAUDE_PLUGIN_ROOT}/skills/security-scan/references/baseline.md" ~/.config/mac-security/baseline.md && chmod 600 ~/.config/mac-security/baseline.md`, then curate it from your first scan.
 
 ## How to run
 
@@ -36,7 +45,7 @@ Read-only audit of a macOS machine for **monitoring tools, persistence, malware,
    ```
    For deep mode also run `${CLAUDE_PLUGIN_ROOT}/skills/security-scan/scripts/deep.sh` and hand the user the Tier-2 sudo block to paste with `!`.
 
-2. **Diff against baseline.** Read `references/baseline.md`. Compare the scan's `## Fingerprint` block line-by-line. **Flag every NEW line** (new launchd job, new system extension, new listening port, new login item) — these are the findings. Removed lines are usually benign (uninstalled apps) but note them.
+2. **Diff against baseline.** Resolve it with `bash ${CLAUDE_PLUGIN_ROOT}/skills/security-scan/scripts/resolve_baseline.sh` and read that file. If it resolved to the bundled template, say so in the report — the diff is then a first-run inventory, not a change list. Compare the scan's `## Fingerprint` block line-by-line. **Flag every NEW line** (new launchd job, new system extension, new listening port, new login item) — these are the findings. Removed lines are usually benign (uninstalled apps) but note them.
 
 3. **Interpret, don't just dump.** For each delta: what is it, who likely installed it (user / vendor updater / employer / unknown), and does it have a monitoring/exfil/keylog capability. Distinguish *capability present* from *actively running*. Benign-but-noisy items (Adobe/Microsoft/Google updaters, screen-share permissions for Zoom/Slack) belong in the baseline, not the alert list.
 
@@ -48,7 +57,7 @@ Read-only audit of a macOS machine for **monitoring tools, persistence, malware,
    (✅ clean / ⚠️ N deltas to review), then the deltas, then the full scan appended.
    Keep reports out of any public repo — they fingerprint your machine.
 
-5. **Update the baseline** only when the user confirms a new item is legitimate — append it to `references/baseline.md` with a one-line justification so it stops alerting next run.
+5. **Update the baseline** only when the user confirms a new item is legitimate — append it to the resolved **private** baseline with a one-line justification so it stops alerting next run. Never write real machine items into the bundled template; if no private baseline exists yet, create one first (see *Baseline location*).
 
 ## Interpretation guardrails
 
@@ -62,9 +71,10 @@ Read-only audit of a macOS machine for **monitoring tools, persistence, malware,
 
 - `scripts/scan.sh` — Tier 1 read-only sweep → Markdown.
 - `scripts/deep.sh` — Tier 2 sudo block + Tier 3 reputation tools.
-- `references/baseline.md` — known-good snapshot; the diff target. Keep current.
+- `scripts/resolve_baseline.sh` — prints the baseline path (`$MAC_SECURITY_BASELINE` → `~/.config/mac-security/baseline.md` → bundled template).
+- `references/baseline.md` — example template for a baseline; your populated copy lives outside the repo.
 - `references/tools.md` — open-source toolkit (Objective-See suite, Lynis, ClamAV) and what each closes.
 
 ## Recurring use
 
-Run from time to time (post-onboarding to a new employer, after installing unfamiliar software, quarterly hygiene). To automate, pair with the `schedule` skill for a monthly run that appends to `audits/` and pings on any new delta. Keep `baseline.md` curated — a stale baseline turns every run into noise.
+Run from time to time (post-onboarding to a new employer, after installing unfamiliar software, quarterly hygiene). To automate, pair with the `schedule` skill for a monthly run that appends to `audits/` and pings on any new delta. Keep your private baseline curated — a stale baseline turns every run into noise.

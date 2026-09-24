@@ -1,12 +1,13 @@
 ---
 name: harden
 description: >-
-  macOS hardening audit — runs Lynis for a hardening-index score, optionally an mSCP
-  (NIST/CIS) audit-only compliance check, verifies GUI guardians (BlockBlock/OverSight/
-  RansomWhere) are present, and produces a prioritized, drduh-aligned checklist of
-  RECOMMENDED (never auto-applied) actions. Read-only / audit-only. Invoke with
-  /mac-security:harden. Trigger phrases: "harden my mac", "hardening audit", "lynis",
-  "cis benchmark", "security posture checklist", "am I hardened".
+  Audits macOS hardening without changing anything: a Lynis hardening-index score, an optional
+  mSCP (NIST/CIS) check-only compliance run, GUI-guardian presence (BlockBlock, OverSight,
+  RansomWhere), and a prioritized drduh-aligned checklist of recommended actions. Never
+  auto-applies fixes. Use when: "harden my mac", "hardening audit", "lynis score", "cis
+  benchmark", "am I hardened", "security posture checklist". NOT for detecting monitoring agents
+  or spyware (→ security-scan), outbound connection review (→ firewall), autostart items (→
+  persistence-watch), or checking a specific file (→ malware-triage).
 ---
 
 # Harden

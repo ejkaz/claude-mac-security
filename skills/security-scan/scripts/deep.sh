@@ -72,4 +72,4 @@ brew install clamav            # signature antivirus: freshclam && clamscan -r ~
 ```
 EOF
 printf '\n_LuLu needs a one-time manual macOS approval (Allow System Extension) after install — cannot be automated._\n'
-printf '\n---\n_See `references/tools.md` for what each tool closes. Compare findings against `references/baseline.md`._\n'
+printf '\n---\n_See `references/tools.md` for what each tool closes. Compare findings against your baseline (path: `scripts/resolve_baseline.sh`)._\n'

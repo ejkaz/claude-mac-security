@@ -20,7 +20,9 @@ bash "$PLUGIN/bin/bootstrap.sh"          # phase 1 + GUI checklist
 bash "$PLUGIN/bin/bootstrap.sh" --seed   # after the gates: seed baselines + first run
 ```
 
-Baselines, snapshots, and the trend ledger are per-machine state in `~/.mac-security-suite/` — each machine seeds its own; nothing machine-identifying ships in this repo. To audit the toolchain piecemeal instead: `bash "$PLUGIN/bin/install-tools.sh"` (read-only; `--install` to provision).
+Baselines, snapshots, and the trend ledger are per-machine state in `~/.mac-security-suite/` — each machine seeds its own; nothing machine-identifying ships in this repo.
+
+**security-scan's Markdown baseline is private too.** The skill diffs against `$MAC_SECURITY_BASELINE` if set, else `~/.config/mac-security/baseline.md`, and only falls back to the bundled example template (`skills/security-scan/references/baseline.md`) when neither exists. Copy the template there (`chmod 600`) and curate it from your first scan; `skills/security-scan/scripts/resolve_baseline.sh` prints which file is in use. To audit the toolchain piecemeal instead: `bash "$PLUGIN/bin/install-tools.sh"` (read-only; `--install` to provision).
 
 ## Skills
 

@@ -1,13 +1,14 @@
 ---
 name: firewall
 description: >-
-  Outbound (egress) firewall advisor built on LuLu + lulu-cli. Reviews what your Mac is
-  phoning home to, curates LuLu's per-process allowlist programmatically, and diffs live
-  connections via Netiquette against a known-good baseline. Read-only by default — proposes
-  rule changes; you approve before any write. Invoke with /mac-security:firewall (review),
-  firewall rules (list LuLu rules), firewall connections (snapshot live egress). Trigger
-  phrases: "what is my mac connecting to", "egress firewall", "lulu rules", "outbound
-  connections", "block this app from phoning home", "review my firewall".
+  Advises on outbound (egress) traffic with LuLu, lulu-cli and Netiquette: shows what the Mac is
+  connecting to, lists and curates LuLu's per-process allow/block rules, and diffs live
+  connections against an egress baseline. Read-only by default — proposes rule changes as commands
+  the user runs. Modes: review, rules, connections, recent. Use when: "what is my mac connecting
+  to", "outbound connections", "egress firewall", "lulu rules", "block this app from phoning
+  home", "review my firewall rules". NOT for a whole-machine monitoring or spyware sweep (→
+  security-scan), checking whether a file or app is malicious (→ malware-triage), launch items or
+  autoruns (→ persistence-watch), or firewall-on/stealth-mode hardening posture (→ harden).
 ---
 
 # Firewall (egress advisor)

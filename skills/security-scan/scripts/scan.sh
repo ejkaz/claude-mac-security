@@ -80,7 +80,7 @@ code "$(scutil --nc list 2>/dev/null || echo '(none)')"
 
 # ── Fingerprint (stable, sorted — for diffing against baseline) ────────────
 hr "Fingerprint"
-note "_Sorted identifiers for mechanical diff vs references/baseline.md. New lines on a later run = investigate._"
+note "_Sorted identifiers for mechanical diff vs your baseline (path: scripts/resolve_baseline.sh). New lines on a later run = investigate._"
 {
   ls /Library/LaunchDaemons/ 2>/dev/null | sed 's/^/launchd-system: /'
   ls /Library/LaunchAgents/ 2>/dev/null | sed 's/^/launchagent-system: /'

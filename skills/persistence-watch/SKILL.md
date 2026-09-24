@@ -1,12 +1,14 @@
 ---
 name: persistence-watch
 description: >-
-  Enumerates everything that persists on macOS (launchd, login items, cron, dylib hijacks,
-  browser extensions, etc.) using KnockKnock's JSON CLI with built-in VirusTotal reputation,
-  then diffs against a known-good baseline so recurring runs surface only NEW persistence.
-  Read-only. Invoke with /mac-security:persistence-watch. Trigger phrases: "what persists
-  on my mac", "knockknock", "new launch items", "persistence check", "autoruns for mac",
-  "did something install itself".
+  Enumerates everything that auto-starts on macOS (launch agents and daemons, login items, cron,
+  kernel/system extensions, dylib inserts, browser extensions) with KnockKnock's JSON CLI plus
+  VirusTotal reputation per binary, then diffs against a persistence baseline so only NEW items
+  surface. Read-only; proposes removals as commands. Use when: "what persists on my mac",
+  "autoruns for mac", "knockknock", "new launch items", "did something install itself", "what
+  starts at login". NOT for a broad monitoring or spyware sweep (→ security-scan), triaging one
+  suspicious file (→ malware-triage), network egress (→ firewall), or hardening checklists (→
+  harden).
 ---
 
 # Persistence Watch
