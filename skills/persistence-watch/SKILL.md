@@ -6,9 +6,9 @@ description: >-
   VirusTotal reputation per binary, then diffs against a persistence baseline so only NEW items
   surface. Read-only; proposes removals as commands. Use when: "what persists on my mac",
   "autoruns for mac", "knockknock", "new launch items", "did something install itself", "what
-  starts at login". NOT for a broad monitoring or spyware sweep (→ security-scan), triaging one
-  suspicious file (→ malware-triage), network egress (→ firewall), or hardening checklists (→
-  harden).
+  starts at login". NOT for a broad monitoring or spyware sweep against a baseline (→
+  security-scan), triaging one suspicious file or a risky link click (→ malware-triage), network
+  traffic, listening ports or firewall rules (→ firewall), or hardening checklists (→ harden).
 ---
 
 # Persistence Watch

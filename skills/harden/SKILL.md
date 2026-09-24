@@ -5,9 +5,10 @@ description: >-
   mSCP (NIST/CIS) check-only compliance run, GUI-guardian presence (BlockBlock, OverSight,
   RansomWhere), and a prioritized drduh-aligned checklist of recommended actions. Never
   auto-applies fixes. Use when: "harden my mac", "hardening audit", "lynis score", "cis
-  benchmark", "am I hardened", "security posture checklist". NOT for detecting monitoring agents
-  or spyware (→ security-scan), outbound connection review (→ firewall), autostart items (→
-  persistence-watch), or checking a specific file (→ malware-triage).
+  benchmark", "am I hardened", "security hardening checklist". NOT for detecting monitoring agents
+  or spyware (→ security-scan), inbound or outbound traffic, open ports or firewall rules (→
+  firewall), autostart items (→ persistence-watch), or checking a specific file or a risky click
+  (→ malware-triage).
 ---
 
 # Harden

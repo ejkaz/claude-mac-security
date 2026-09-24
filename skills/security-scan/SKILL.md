@@ -1,16 +1,16 @@
 ---
 name: security-scan
 description: >-
-  Runs a read-only, whole-machine macOS security sweep — monitoring and surveillance agents (MDM,
+  Runs a read-only, whole-machine macOS posture sweep — monitoring and surveillance agents (MDM,
   EDR, DLP, RMM, time-trackers, spyware), persistence, malware signatures, network exposure,
   privacy-permission grants and hardening posture — and diffs the fingerprint against a known-good
   baseline (a private file at $MAC_SECURITY_BASELINE or ~/.config/mac-security/baseline.md, else
   the bundled template) so recurring runs surface only changes. Modes: quick, deep, harden
   checklist. Use when: "security scan", "scan my mac", "is anything monitoring me", "what's
-  watching my machine", "check for spyware", "audit my laptop". NOT for checking one specific
-  file, app or download (→ malware-triage), outbound connections or LuLu rules (→ firewall),
-  KnockKnock autostart inventory with VirusTotal (→ persistence-watch), or a Lynis/CIS hardening
-  score (→ harden).
+  watching my machine", "check for spyware", "audit my laptop". NOT for one specific file,
+  download, or a suspected infection after a risky click (→ malware-triage), outbound flows, open
+  ports, listeners or firewall rules (→ firewall), a KnockKnock autostart inventory with
+  VirusTotal (→ persistence-watch), or a Lynis/CIS hardening score (→ harden).
 ---
 
 # Security Scan

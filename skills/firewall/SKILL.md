@@ -1,14 +1,16 @@
 ---
 name: firewall
 description: >-
-  Advises on outbound (egress) traffic with LuLu, lulu-cli and Netiquette: shows what the Mac is
-  connecting to, lists and curates LuLu's per-process allow/block rules, and diffs live
-  connections against an egress baseline. Read-only by default — proposes rule changes as commands
-  the user runs. Modes: review, rules, connections, recent. Use when: "what is my mac connecting
-  to", "outbound connections", "egress firewall", "lulu rules", "block this app from phoning
-  home", "review my firewall rules". NOT for a whole-machine monitoring or spyware sweep (→
-  security-scan), checking whether a file or app is malicious (→ malware-triage), launch items or
-  autoruns (→ persistence-watch), or firewall-on/stealth-mode hardening posture (→ harden).
+  Reviews the Mac's network firewall in both directions, read-only: outbound flows and LuLu
+  per-process allow/block rules (lulu-cli, Netiquette), and inbound exposure — listening ports,
+  application-firewall and stealth state, and pf packet-filter rules — diffed against a baseline;
+  proposes rule changes as commands the user runs. Modes: review, rules, connections, recent,
+  inbound. Use when: "what is my mac connecting to", "block this app from phoning home", "review
+  my lulu rules", "is inbound traffic locked down", "what's listening on my mac", "which ports are
+  open", "check my pf rules". NOT for a whole-machine monitoring or spyware sweep against a
+  baseline (→ security-scan), a suspicious file, download or link click (→ malware-triage), launch
+  items or autoruns (→ persistence-watch), or a Lynis/CIS hardening score and checklist (→
+  harden).
 ---
 
 # Firewall (egress advisor)
@@ -34,6 +36,7 @@ require `sudo`; surface the command, let the user run it.
 | `firewall rules` | `lulu-cli list` — dump the current allow/block rule set, grouped by process. |
 | `firewall connections` | `Netiquette -list -names -pretty -skipApple` → parse JSON, diff vs baseline, surface NEW listeners/flows. |
 | `firewall recent` | `lulu-cli recent 50` — most recently prompted/created rules (catches "what did I just approve"). |
+| `firewall inbound` | Inbound exposure: listening sockets (`lsof -iTCP -sTCP:LISTEN -nP`, `lsof -iUDP -nP`), app-firewall state (`socketfilterfw --getglobalstate --getstealthmode --getblockall --listapps`), and pf (`sudo pfctl -s info`, `sudo pfctl -s rules` — surface the command, the user runs it). Flag anything bound to `*`/`0.0.0.0` rather than `127.0.0.1`. |
 
 ## Run
 
@@ -41,7 +44,7 @@ require `sudo`; surface the command, let the user run it.
 bash ${CLAUDE_PLUGIN_ROOT}/skills/firewall/scripts/firewall.sh
 ```
 One read-only snapshot: LuLu status + rules + recent, live connections (Netiquette, lsof
-fallback), and app-firewall posture. Then diff against the baseline per the procedure below.
+fallback), app-firewall posture, and inbound listeners. Then diff against the baseline per the procedure below.
 
 ## Procedure
 

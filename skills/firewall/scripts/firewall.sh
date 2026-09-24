@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# firewall :: read-only egress snapshot — LuLu rules + live connections.
+# firewall :: read-only snapshot — LuLu rules, live connections, inbound listeners.
 # No sudo, no mutations. Emits Markdown to stdout. Rule WRITES are never done here;
 # the skill proposes `lulu-cli add/delete` commands for the user to run.
 set -uo pipefail
@@ -52,5 +52,10 @@ code "$(lsof -nP -iTCP -sTCP:ESTABLISHED 2>/dev/null | awk 'NR>1{print $1, $9}' 
 # ── System-level egress posture ────────────────────────────────────────────
 hr "Application firewall posture"
 code "$(/usr/libexec/ApplicationFirewall/socketfilterfw --getglobalstate --getstealthmode 2>/dev/null || echo 'socketfilterfw: unavailable')"
+
+# ── Inbound exposure (no sudo) ─────────────────────────────────────────────
+hr "Inbound — listening sockets (your user; non-loopback binds are the finding)"
+code "$(lsof -nP -iTCP -sTCP:LISTEN 2>/dev/null | awk 'NR>1{print $1, $9}' | sort -u)"
+note "_pf rules need root: run \`sudo pfctl -s info\` and \`sudo pfctl -s rules\` yourself._"
 
 printf '\n---\n_Read-only. To change LuLu rules, the skill proposes `sudo lulu-cli add/delete ...` then a single `sudo lulu-cli reload` (reload = ~8s filtering gap)._\n'
