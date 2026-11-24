@@ -50,7 +50,7 @@ Deterministic, zero-LLM core under the skills — prose diffing replaced by cano
 Data lives in `~/.mac-security-suite/` (baselines, snapshots, ledger, reports) — never in this repo.
 For full persistence coverage from launchd, grant **KnockKnock.app** Full Disk Access (terminal FDA doesn't extend to cron).
 
-The optional `hooks/hooks.json` PreToolUse guard (blocks `curl|sh` pipe-to-shell installs and `rm -rf`) ships **enabled** as of v0.2.
+The optional `hooks/hooks.json` PreToolUse guard (blocks `curl|sh` pipe-to-shell installs and `rm -rf`) ships **enabled** as of v0.2. Since v0.2.4 the `rm -rf` rule blocks only what the shell would execute: grep patterns, commit messages and heredoc bodies fed to `cat`/`python3` pass, while `bash -c`, `eval`, heredocs fed to a shell and similar still block (`bin/guard_exec_text.py`; fails closed). The block message names the alternative (a new dir, or `trash`). Test matrix: `/usr/bin/python3 -I tests/test_guard_bash.py`.
 
 ## Toolchain (all open-source)
 
